@@ -1,0 +1,20 @@
+name: Daily Rich Video
+on:
+  schedule:
+    - cron: "0 14 * * *"   # 2 PM every day
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with: { python-version: '3.11' }
+      - run: pip install gspread google-auth openai requests moviepy edge-tts
+      - run: python richbot.py
+        env:
+          GOOGLE_SA: ${{ secrets.GOOGLE_SA }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          TT_KEY: ${{ secrets.TT_KEY }}
+          TT_SEC: ${{ secrets.TT_SEC }}
